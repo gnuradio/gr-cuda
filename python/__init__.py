@@ -7,15 +7,15 @@
 # The presence of this file turns this directory into a Python package
 
 '''
-This is the GNU Radio CUDA_BUFFER module. Place your Python package
+This is the GNU Radio CUDA module. Place your Python package
 description here (python/__init__.py).
 '''
 import os
 
-# import pybind11 generated symbols into the cuda_buffer namespace
+# import pybind11 generated symbols into the cuda namespace
 try:
     # this might fail if the module is python-only
-    from .cuda_buffer_python import *
+    from .cuda_python import *
 except ModuleNotFoundError:
     pass
 

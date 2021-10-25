@@ -8,10 +8,10 @@
 ########################################################################
 # Check if there is C++ code at all
 ########################################################################
-if(NOT cuda_buffer_sources)
+if(NOT cuda_sources)
     MESSAGE(STATUS "No C++ sources... skipping python bindings")
     return()
-endif(NOT cuda_buffer_sources)
+endif(NOT cuda_sources)
 
 ########################################################################
 # Check for pygccxml
@@ -28,12 +28,12 @@ include(GrPybind)
 # Python Bindings
 ########################################################################
 
-list(APPEND cuda_buffer_python_files
+list(APPEND cuda_python_files
     python_bindings.cc)
 
-GR_PYBIND_MAKE_OOT(cuda_buffer 
+GR_PYBIND_MAKE_OOT(cuda 
    ../..
-   gr::cuda_buffer
-   "${cuda_buffer_python_files}")
+   gr::cuda
+   "${cuda_python_files}")
 
-install(TARGETS cuda_buffer_python DESTINATION ${GR_PYTHON_DIR}/cuda_buffer COMPONENT pythonapi)
+install(TARGETS cuda_python DESTINATION ${GR_PYTHON_DIR}/cuda COMPONENT pythonapi)

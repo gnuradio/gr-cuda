@@ -10,7 +10,7 @@
  */
 
 #include <gnuradio/block.h>
-#include <cuda_buffer/cuda_buffer.h>
+#include <gnuradio/cuda/cuda.h>
 
 #include <cstring>
 #include <sstream>
@@ -20,9 +20,9 @@
 
 namespace gr {
 
-buffer_type cuda_buffer::type(buftype<cuda_buffer, cuda_buffer>{});
+buffer_type cuda::type(buftype<cuda, cuda>{});
 
-void* cuda_buffer::cuda_memcpy(void* dest, const void* src, std::size_t count)
+void* cuda::cuda_memcpy(void* dest, const void* src, std::size_t count)
 {
     cudaError_t rc = cudaSuccess;
 #if STREAM_COPY
@@ -41,7 +41,7 @@ void* cuda_buffer::cuda_memcpy(void* dest, const void* src, std::size_t count)
     return dest;
 }
 
-void* cuda_buffer::cuda_memmove(void* dest, const void* src, std::size_t count)
+void* cuda::cuda_memmove(void* dest, const void* src, std::size_t count)
 {
     // Would a kernel that checks for overlap and then copies front-to-back or
     // back-to-front be faster than using cudaMemcpy with a temp buffer?
@@ -93,7 +93,7 @@ void* cuda_buffer::cuda_memmove(void* dest, const void* src, std::size_t count)
     return dest;
 }
 
-cuda_buffer::cuda_buffer(int nitems,
+cuda::cuda(int nitems,
                          size_t sizeof_item,
                          uint64_t downstream_lcm_nitems,
                          uint32_t downstream_max_out_mult,
@@ -103,7 +103,7 @@ cuda_buffer::cuda_buffer(int nitems,
                            downstream_max_out_mult, link, buf_owner),
       d_cuda_buf(nullptr)
 {
-    gr::configure_default_loggers(d_logger, d_debug_logger, "cuda_buffer");
+    gr::configure_default_loggers(d_logger, d_debug_logger, "cuda");
     if (!allocate_buffer(nitems))
         throw std::bad_alloc();
     
@@ -112,7 +112,7 @@ cuda_buffer::cuda_buffer(int nitems,
     cudaStreamCreate(&d_stream);
 }
 
-cuda_buffer::~cuda_buffer()
+cuda::~cuda()
 {
     // Free host buffer
     if (d_base != nullptr) {
@@ -127,12 +127,12 @@ cuda_buffer::~cuda_buffer()
     }
 }
 
-void cuda_buffer::post_work(int nitems)
+void cuda::post_work(int nitems)
 {
 #ifdef BUFFER_DEBUG
     std::ostringstream msg;
     msg << "[" << this << "] "
-        << "cuda_buffer [" << d_transfer_type << "] -- post_work: " << nitems;
+        << "cuda [" << d_transfer_type << "] -- post_work: " << nitems;
     GR_LOG_DEBUG(d_logger, msg.str());
 #endif
 
@@ -193,7 +193,7 @@ void cuda_buffer::post_work(int nitems)
 
     default:
         std::ostringstream msg;
-        msg << "Unexpected context for cuda_buffer: " << d_transfer_type;
+        msg << "Unexpected context for cuda: " << d_transfer_type;
         GR_LOG_ERROR(d_logger, msg.str());
         throw std::runtime_error(msg.str());
     }
@@ -201,13 +201,13 @@ void cuda_buffer::post_work(int nitems)
     return;
 }
 
-bool cuda_buffer::do_allocate_buffer(size_t final_nitems, size_t sizeof_item)
+bool cuda::do_allocate_buffer(size_t final_nitems, size_t sizeof_item)
 {
 #ifdef BUFFER_DEBUG
     {
         std::ostringstream msg;
         msg << "[" << this << "] "
-            << "cuda_buffer constructor -- nitems: " << final_nitems;
+            << "cuda constructor -- nitems: " << final_nitems;
         GR_LOG_DEBUG(d_logger, msg.str());
     }
 #endif
@@ -238,7 +238,7 @@ bool cuda_buffer::do_allocate_buffer(size_t final_nitems, size_t sizeof_item)
     return true;
 }
 
-void* cuda_buffer::write_pointer()
+void* cuda::write_pointer()
 {
     void* ptr = nullptr;
     switch (d_transfer_type) {
@@ -255,7 +255,7 @@ void* cuda_buffer::write_pointer()
 
     default:
         std::ostringstream msg;
-        msg << "Unexpected context for cuda_buffer: " << d_transfer_type;
+        msg << "Unexpected context for cuda: " << d_transfer_type;
         GR_LOG_ERROR(d_logger, msg.str());
         throw std::runtime_error(msg.str());
     }
@@ -263,7 +263,7 @@ void* cuda_buffer::write_pointer()
     return ptr;
 }
 
-const void* cuda_buffer::_read_pointer(unsigned int read_index)
+const void* cuda::_read_pointer(unsigned int read_index)
 {
     void* ptr = nullptr;
     switch (d_transfer_type) {
@@ -280,7 +280,7 @@ const void* cuda_buffer::_read_pointer(unsigned int read_index)
 
     default:
         std::ostringstream msg;
-        msg << "Unexpected context for cuda_buffer: " << d_transfer_type;
+        msg << "Unexpected context for cuda: " << d_transfer_type;
         GR_LOG_ERROR(d_logger, msg.str());
         throw std::runtime_error(msg.str());
     }
@@ -288,14 +288,14 @@ const void* cuda_buffer::_read_pointer(unsigned int read_index)
     return ptr;
 }
 
-bool cuda_buffer::input_blocked_callback(int items_required,
+bool cuda::input_blocked_callback(int items_required,
                                          int items_avail,
                                          unsigned read_index)
 {
 #ifdef BUFFER_DEBUG
     std::ostringstream msg;
     msg << "[" << this << "] "
-        << "cuda_buffer [" << d_transfer_type << "] -- input_blocked_callback";
+        << "cuda [" << d_transfer_type << "] -- input_blocked_callback";
     GR_LOG_DEBUG(d_logger, msg.str());
 #endif
 
@@ -320,7 +320,7 @@ bool cuda_buffer::input_blocked_callback(int items_required,
 
     default:
         std::ostringstream msg;
-        msg << "Unexpected context for cuda_buffer: " << d_transfer_type;
+        msg << "Unexpected context for cuda: " << d_transfer_type;
         GR_LOG_ERROR(d_logger, msg.str());
         throw std::runtime_error(msg.str());
     }
@@ -328,7 +328,7 @@ bool cuda_buffer::input_blocked_callback(int items_required,
     return rc;
 }
 
-bool cuda_buffer::output_blocked_callback(int output_multiple, bool force)
+bool cuda::output_blocked_callback(int output_multiple, bool force)
 {
 #ifdef BUFFER_DEBUG
     std::ostringstream msg;
@@ -353,7 +353,7 @@ bool cuda_buffer::output_blocked_callback(int output_multiple, bool force)
 
     default:
         std::ostringstream msg;
-        msg << "Unexpected context for cuda_buffer: " << d_transfer_type;
+        msg << "Unexpected context for cuda: " << d_transfer_type;
         GR_LOG_ERROR(d_logger, msg.str());
         throw std::runtime_error(msg.str());
     }
@@ -361,14 +361,14 @@ bool cuda_buffer::output_blocked_callback(int output_multiple, bool force)
     return rc;
 }
 
-buffer_sptr cuda_buffer::make_buffer(int nitems,
+buffer_sptr cuda::make_buffer(int nitems,
                                      size_t sizeof_item,
                                      uint64_t downstream_lcm_nitems,
                                      uint32_t downstream_max_out_mult,
                                      block_sptr link,
                                      block_sptr buf_owner)
 {
-    return buffer_sptr(new cuda_buffer(nitems, sizeof_item, downstream_lcm_nitems, 
+    return buffer_sptr(new cuda(nitems, sizeof_item, downstream_lcm_nitems, 
                                        downstream_max_out_mult, link, buf_owner));
 }
 

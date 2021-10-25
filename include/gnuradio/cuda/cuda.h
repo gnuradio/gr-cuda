@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef INCLUDED_GR_RUNTIME_CUDA_BUFFER_H
-#define INCLUDED_GR_RUNTIME_CUDA_BUFFER_H
+#ifndef INCLUDED_GR_CUDA_H
+#define INCLUDED_GR_CUDA_H
 
 #include <gnuradio/buffer_single_mapped.h>
 #include <gnuradio/buffer_type.h>
@@ -31,7 +31,7 @@ namespace gr {
  * of data between the two depending on the buffer's assigned context.
  *
  */
-class GR_RUNTIME_API cuda_buffer : public buffer_single_mapped
+class GR_RUNTIME_API cuda : public buffer_single_mapped
 {
 public:
     mem_func_t f_cuda_memcpy;
@@ -41,7 +41,7 @@ public:
 
     static buffer_type type;
 
-    virtual ~cuda_buffer();
+    virtual ~cuda();
 
     /*!
      * \brief Handle post-general_work() cleanup and data transfer
@@ -84,7 +84,7 @@ public:
     bool output_blocked_callback(int output_multiple, bool force);
 
     /*!
-     * \brief Creates a new cuda_buffer object
+     * \brief Creates a new cuda object
      *
      * \param nitems
      * \param sizeof_item
@@ -124,7 +124,7 @@ private:
      * dependent boundary.  This is typically the system page size, but
      * under MS windows is 64KB.
      */
-    cuda_buffer(int nitems,
+    cuda(int nitems,
                 size_t sizeof_item,
                 uint64_t downstream_lcm_nitems,
                 uint32_t downstream_max_out_mult,
@@ -134,4 +134,4 @@ private:
 
 } /* namespace gr */
 
-#endif /* INCLUDED_GR_RUNTIME_CUDA_BUFFER_H */
+#endif /* INCLUDED_GR_CUDA_H */

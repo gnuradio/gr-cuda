@@ -34,7 +34,7 @@ void* init_numpy()
     return NULL;
 }
 
-PYBIND11_MODULE(cuda_buffer_python, m)
+PYBIND11_MODULE(cuda_python, m)
 {
     // Initialize the numpy C API
     // (otherwise we will see segmentation faults)
