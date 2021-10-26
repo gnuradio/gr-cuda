@@ -31,7 +31,7 @@ namespace gr {
  * of data between the two depending on the buffer's assigned context.
  *
  */
-class GR_RUNTIME_API cuda : public buffer_single_mapped
+class GR_RUNTIME_API cuda_buffer : public buffer_single_mapped
 {
 public:
     mem_func_t f_cuda_memcpy;
@@ -41,7 +41,7 @@ public:
 
     static buffer_type type;
 
-    virtual ~cuda();
+    virtual ~cuda_buffer();
 
     /*!
      * \brief Handle post-general_work() cleanup and data transfer
@@ -124,7 +124,7 @@ private:
      * dependent boundary.  This is typically the system page size, but
      * under MS windows is 64KB.
      */
-    cuda(int nitems,
+    cuda_buffer(int nitems,
                 size_t sizeof_item,
                 uint64_t downstream_lcm_nitems,
                 uint32_t downstream_max_out_mult,

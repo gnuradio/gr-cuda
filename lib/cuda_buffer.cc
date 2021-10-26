@@ -10,7 +10,7 @@
  */
 
 #include <gnuradio/block.h>
-#include <gnuradio/cuda/cuda.h>
+#include <gnuradio/cuda/cuda_buffer.h>
 
 #include <cstring>
 #include <sstream>
@@ -20,9 +20,9 @@
 
 namespace gr {
 
-buffer_type cuda::type(buftype<cuda, cuda>{});
+buffer_type cuda_buffer::type(buftype<cuda_buffer, cuda_buffer>{});
 
-void* cuda::cuda_memcpy(void* dest, const void* src, std::size_t count)
+void* cuda_buffer::cuda_memcpy(void* dest, const void* src, std::size_t count)
 {
     cudaError_t rc = cudaSuccess;
 #if STREAM_COPY
@@ -41,7 +41,7 @@ void* cuda::cuda_memcpy(void* dest, const void* src, std::size_t count)
     return dest;
 }
 
-void* cuda::cuda_memmove(void* dest, const void* src, std::size_t count)
+void* cuda_buffer::cuda_memmove(void* dest, const void* src, std::size_t count)
 {
     // Would a kernel that checks for overlap and then copies front-to-back or
     // back-to-front be faster than using cudaMemcpy with a temp buffer?
@@ -93,7 +93,7 @@ void* cuda::cuda_memmove(void* dest, const void* src, std::size_t count)
     return dest;
 }
 
-cuda::cuda(int nitems,
+cuda_buffer::cuda_buffer(int nitems,
                          size_t sizeof_item,
                          uint64_t downstream_lcm_nitems,
                          uint32_t downstream_max_out_mult,
@@ -112,7 +112,7 @@ cuda::cuda(int nitems,
     cudaStreamCreate(&d_stream);
 }
 
-cuda::~cuda()
+cuda_buffer::~cuda_buffer()
 {
     // Free host buffer
     if (d_base != nullptr) {
@@ -127,7 +127,7 @@ cuda::~cuda()
     }
 }
 
-void cuda::post_work(int nitems)
+void cuda_buffer::post_work(int nitems)
 {
 #ifdef BUFFER_DEBUG
     std::ostringstream msg;
@@ -201,7 +201,7 @@ void cuda::post_work(int nitems)
     return;
 }
 
-bool cuda::do_allocate_buffer(size_t final_nitems, size_t sizeof_item)
+bool cuda_buffer::do_allocate_buffer(size_t final_nitems, size_t sizeof_item)
 {
 #ifdef BUFFER_DEBUG
     {
@@ -238,7 +238,7 @@ bool cuda::do_allocate_buffer(size_t final_nitems, size_t sizeof_item)
     return true;
 }
 
-void* cuda::write_pointer()
+void* cuda_buffer::write_pointer()
 {
     void* ptr = nullptr;
     switch (d_transfer_type) {
@@ -263,7 +263,7 @@ void* cuda::write_pointer()
     return ptr;
 }
 
-const void* cuda::_read_pointer(unsigned int read_index)
+const void* cuda_buffer::_read_pointer(unsigned int read_index)
 {
     void* ptr = nullptr;
     switch (d_transfer_type) {
@@ -288,7 +288,7 @@ const void* cuda::_read_pointer(unsigned int read_index)
     return ptr;
 }
 
-bool cuda::input_blocked_callback(int items_required,
+bool cuda_buffer::input_blocked_callback(int items_required,
                                          int items_avail,
                                          unsigned read_index)
 {
@@ -328,7 +328,7 @@ bool cuda::input_blocked_callback(int items_required,
     return rc;
 }
 
-bool cuda::output_blocked_callback(int output_multiple, bool force)
+bool cuda_buffer::output_blocked_callback(int output_multiple, bool force)
 {
 #ifdef BUFFER_DEBUG
     std::ostringstream msg;
@@ -361,14 +361,14 @@ bool cuda::output_blocked_callback(int output_multiple, bool force)
     return rc;
 }
 
-buffer_sptr cuda::make_buffer(int nitems,
+buffer_sptr cuda_buffer::make_buffer(int nitems,
                                      size_t sizeof_item,
                                      uint64_t downstream_lcm_nitems,
                                      uint32_t downstream_max_out_mult,
                                      block_sptr link,
                                      block_sptr buf_owner)
 {
-    return buffer_sptr(new cuda(nitems, sizeof_item, downstream_lcm_nitems, 
+    return buffer_sptr(new cuda_buffer(nitems, sizeof_item, downstream_lcm_nitems, 
                                        downstream_max_out_mult, link, buf_owner));
 }
 

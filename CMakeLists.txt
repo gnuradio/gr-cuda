@@ -169,6 +169,6 @@ endif(ENABLE_PYTHON)
 # Install cmake search helper for this library
 ########################################################################
 
-install(FILES cmake/Modules/cudaConfig.cmake
-    DESTINATION ${CMAKE_MODULES_DIR}/gnuradio/cuda
+install(FILES cmake/Modules/gnuradio-cudaConfig.cmake
+    DESTINATION ${CMAKE_MODULES_DIR}/gnuradio-cuda
 )

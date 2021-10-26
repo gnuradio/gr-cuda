@@ -18,7 +18,7 @@ find_package(CUDA REQUIRED)
 
 
 list(APPEND cuda_sources
-    cuda.cc
+    cuda_buffer.cc
 )
 
 set(cuda_sources "${cuda_sources}" PARENT_SCOPE)
