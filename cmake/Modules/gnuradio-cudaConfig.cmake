@@ -5,7 +5,7 @@ PKG_CHECK_MODULES(PC_CUDA cuda)
 
 FIND_PATH(
     GR_CUDA_INCLUDE_DIRS
-    NAMES cuda/api.h
+    NAMES gnuradio/cuda/api.h
     HINTS $ENV{GR_CUDA_DIR}/include
         ${PC_CUDA_INCLUDEDIR}
     PATHS ${CMAKE_INSTALL_PREFIX}/include
