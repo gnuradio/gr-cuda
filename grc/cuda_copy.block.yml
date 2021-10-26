@@ -1,5 +1,5 @@
 id: cuda_copy
-label: copy
+label: Copy (CUDA)
 category: '[CUDA]'
 
 templates:
