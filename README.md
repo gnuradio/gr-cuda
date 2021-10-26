@@ -26,6 +26,7 @@ find_package(gnuradio-cuda REQUIRED)
 
 2. Create a library to hold the CUDA specific code:
 
+```cuda
 add_library(gnuradio-myoot-cu STATIC 
     my_kernel.cu
 )
@@ -34,7 +35,7 @@ set_target_properties(gnuradio-myoot-cu PROPERTIES
     CUDA_VISIBILITY_PRESET "hidden"
     CUDA_SEPARABLE_COMPILATION ON
 )
-```cuda
+
 # Make a fat binary for supported architectures
 # Compile for supported archs; CMake workaround, see: https://stackoverflow.com/a/54505975/73878
 target_compile_options(gnuradio-myoot-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_60,code=sm_60>")
