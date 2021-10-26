@@ -159,7 +159,7 @@ add_subdirectory(docs)
 # NOTE: manually update below to use GRC to generate C++ flowgraphs w/o python
 if(ENABLE_PYTHON)
   message(STATUS "PYTHON and GRC components are enabled")
-  add_subdirectory(python)
+  add_subdirectory(python/cuda)
   add_subdirectory(grc)
 else(ENABLE_PYTHON)
   message(STATUS "PYTHON and GRC components are disabled")

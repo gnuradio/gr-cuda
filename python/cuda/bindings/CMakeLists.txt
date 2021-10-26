@@ -33,7 +33,7 @@ list(APPEND cuda_python_files
     multiply_const_python.cc python_bindings.cc)
 
 GR_PYBIND_MAKE_OOT(cuda 
-   ../..
+   ../../..
    gr::cuda
    "${cuda_python_files}")
 
