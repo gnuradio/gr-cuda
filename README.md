@@ -2,6 +2,8 @@
 
 CUDA Support for GNU Radio using the custom buffer changes introduced in GR 3.10.  Custom buffers for CUDA-enabled hardware are provided that can be included in any OOT.  This allows the work() or general_work() function of a block to have data provided in the input- and output- buffers that has already been transitioned to device memory so that data movement does not have to take place in the work() function itself.  
 
+<img title="Simple flowgraph with CUDA block" alt="Simple CUDA flowgraph" src="docs/img/flowgraph_copy.png">
+
 ## Prerequisites
 
 1. NVIDIA CUDA supported GPU
