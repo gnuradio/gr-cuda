@@ -7,5 +7,6 @@
 #
 
 install(FILES
-    DESTINATION share/gnuradio/grc/blocks
+    cuda.domain.yml
+    cuda_copy.block.yml DESTINATION share/gnuradio/grc/blocks
 )

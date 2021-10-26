@@ -1,0 +1,15 @@
+id: cuda
+label: CUDA
+color: "#b300ff"
+
+multiple_connections_per_input: false
+multiple_connections_per_output: true
+
+templates:
+-   type: [cuda, cuda]
+    connect: self.connect(${ make_port_sig(source) }, ${ make_port_sig(sink) })
+-   type: [cuda, stream]
+    connect: self.connect(${ make_port_sig(source) }, ${ make_port_sig(sink) })
+-   type: [stream, cuda]
+    connect: self.connect(${ make_port_sig(source) }, ${ make_port_sig(sink) })
+

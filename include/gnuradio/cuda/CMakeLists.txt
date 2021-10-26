@@ -12,5 +12,6 @@
 install(FILES
     api.h
     cuda_buffer.h
+    copy.h
     DESTINATION include/gnuradio/cuda
 )

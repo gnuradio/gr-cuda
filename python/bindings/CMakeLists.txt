@@ -29,6 +29,7 @@ include(GrPybind)
 ########################################################################
 
 list(APPEND cuda_python_files
+    copy_python.cc
     python_bindings.cc)
 
 GR_PYBIND_MAKE_OOT(cuda 
@@ -36,4 +37,4 @@ GR_PYBIND_MAKE_OOT(cuda
    gr::cuda
    "${cuda_python_files}")
 
-install(TARGETS cuda_python DESTINATION ${GR_PYTHON_DIR}/cuda COMPONENT pythonapi)
+install(TARGETS cuda_python DESTINATION ${GR_PYTHON_DIR}/gnuradio/cuda COMPONENT pythonapi)

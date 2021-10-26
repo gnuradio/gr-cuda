@@ -1,0 +1,33 @@
+id: cuda_copy
+label: copy
+category: '[CUDA]'
+
+templates:
+  imports: from gnuradio import cuda
+  make: cuda.copy(${type.size}*${vlen})
+parameters:
+-   id: type
+    label: Type
+    dtype: enum
+    options: [complex, float, int, short, byte]
+    option_attributes:
+        size: [gr.sizeof_gr_complex, gr.sizeof_float, gr.sizeof_int, gr.sizeof_short,
+            gr.sizeof_char]
+    hide: part
+-   id: vlen
+    label: Vector Length
+    dtype: int
+    default: '1'
+    hide: ${ 'part' if vlen == 1 else 'none' }
+inputs:
+- label: in
+  domain: cuda
+  dtype: ${type}
+  vlen: ${vlen}
+outputs:
+- label: out
+  domain: cuda
+  dtype: ${type}
+  vlen: ${vlen}
+
+file_format: 1
