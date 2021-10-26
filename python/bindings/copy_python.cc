@@ -16,7 +16,7 @@
 /* BINDTOOL_GEN_AUTOMATIC(0) */
 /* BINDTOOL_USE_PYGCCXML(0) */
 /* BINDTOOL_HEADER_FILE(copy.h)                                        */
-/* BINDTOOL_HEADER_FILE_HASH(e76ea22d8bb3b802d7e7bf35c2b02dbc) */
+/* BINDTOOL_HEADER_FILE_HASH(2ba0497b0f20abc0f60cb1053aa64cde) */
 /***********************************************************************************/
 
 #include <pybind11/complex.h>
@@ -25,7 +25,7 @@
 
 namespace py = pybind11;
 
-#include <cuda/copy.h>
+#include <gnuradio/cuda/copy.h>
 // pydoc.h is automatically generated in the build directory
 #include <copy_pydoc.h>
 

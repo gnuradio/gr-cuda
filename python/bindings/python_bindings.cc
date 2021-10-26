@@ -22,6 +22,7 @@ namespace py = pybind11;
 /**************************************/
 // BINDING_FUNCTION_PROTOTYPES(
 void bind_copy(py::module &m);
+    void bind_multiply_const(py::module& m);
 // ) END BINDING_FUNCTION_PROTOTYPES
 
 
@@ -51,5 +52,6 @@ PYBIND11_MODULE(cuda_python, m)
     /**************************************/
     // BINDING_FUNCTION_CALLS(
     bind_copy(m);
+    bind_multiply_const(m);
     // ) END BINDING_FUNCTION_CALLS
 }

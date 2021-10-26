@@ -8,5 +8,6 @@
 
 install(FILES
     cuda.domain.yml
-    cuda_copy.block.yml DESTINATION share/gnuradio/grc/blocks
+    cuda_copy.block.yml
+    cuda_multiply_const_xx.block.yml DESTINATION share/gnuradio/grc/blocks
 )

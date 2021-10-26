@@ -11,7 +11,7 @@
 #ifndef INCLUDED_CUDA_COPY_H
 #define INCLUDED_CUDA_COPY_H
 
-#include <cuda/api.h>
+#include <gnuradio/cuda/api.h>
 #include <gnuradio/sync_block.h>
 
 namespace gr {

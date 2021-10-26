@@ -14,12 +14,35 @@ include(GrPlatform) #define LIB_SUFFIX
 ###############################################################################
 # CUDA Dependency is required
 ###############################################################################
-find_package(CUDA REQUIRED)
-
+add_library(gnuradio-cuda-cu STATIC 
+    cuda_error.cc
+    multiply_const.cu
+)
+set_target_properties(gnuradio-cuda-cu PROPERTIES 
+    POSITION_INDEPENDENT_CODE ON
+    CUDA_VISIBILITY_PRESET "hidden"
+    CUDA_SEPARABLE_COMPILATION ON
+)
+target_include_directories(gnuradio-cuda-cu
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+    PUBLIC $<INSTALL_INTERFACE:include>
+    ${CUDA_INCLUDE_DIRS} 
+  )
+# Make a fat binary for supported architectures
+# Compile for supported archs; CMake workaround, see: https://stackoverflow.com/a/54505975/73878
+target_compile_options(gnuradio-cuda-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_60,code=sm_60>")
+target_compile_options(gnuradio-cuda-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_61,code=sm_61>")
+target_compile_options(gnuradio-cuda-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_62,code=sm_62>")
+target_compile_options(gnuradio-cuda-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_70,code=sm_70>")
+target_compile_options(gnuradio-cuda-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_72,code=sm_72>")
+target_compile_options(gnuradio-cuda-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_75,code=sm_75>")
+# target_compile_options(gnuradio-myoot-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_80,code=sm_80>")
+# target_compile_options(gnuradio-myoot-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_86,code=sm_86>")
 
 list(APPEND cuda_sources
     cuda_buffer.cc
     copy_impl.cc
+    multiply_const_impl.cc
 )
 
 set(cuda_sources "${cuda_sources}" PARENT_SCOPE)
@@ -33,6 +56,7 @@ target_link_libraries(gnuradio-cuda PUBLIC
     gnuradio::gnuradio-runtime
     ${CUDA_CUDART_LIBRARY}  
     )
+target_link_libraries(gnuradio-cuda PRIVATE gnuradio-cuda-cu)
 
 target_include_directories(gnuradio-cuda
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>

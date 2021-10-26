@@ -10,7 +10,7 @@
 # Project setup
 ########################################################################
 cmake_minimum_required(VERSION 3.8)
-project(gr-cuda CXX C)
+project(gr-cuda CXX C CUDA)
 enable_testing()
 
 # Install to PyBOMBS target prefix if defined
@@ -47,7 +47,7 @@ if((CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
     CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     AND NOT WIN32)
     #http://gcc.gnu.org/wiki/Visibility
-    add_definitions(-fvisibility=hidden)
+    set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 endif()
 
 IF(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")

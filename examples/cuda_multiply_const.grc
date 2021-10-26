@@ -32,6 +32,27 @@ options:
     state: enabled
 
 blocks:
+- name: k
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: ''
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '.01'
+    stop: '1'
+    value: '0.5'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [360, 20.0]
+    rotation: 0
+    state: true
 - name: samp_rate
   id: variable
   parameters:
@@ -66,12 +87,13 @@ blocks:
     coordinate: [264, 236.0]
     rotation: 0
     state: true
-- name: cuda_copy_0
-  id: cuda_copy
+- name: cuda_multiply_const_xx_0
+  id: cuda_multiply_const_xx
   parameters:
     affinity: ''
     alias: ''
     comment: ''
+    const: k
     maxoutbuf: '0'
     minoutbuf: '0'
     type: complex
@@ -80,7 +102,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [512, 164.0]
+    coordinate: [512, 220.0]
     rotation: 0
     state: true
 - name: qtgui_time_sink_x_0
@@ -182,8 +204,8 @@ blocks:
     state: true
 
 connections:
-- [analog_sig_source_x_0, '0', cuda_copy_0, '0']
-- [cuda_copy_0, '0', qtgui_time_sink_x_0, '0']
+- [analog_sig_source_x_0, '0', cuda_multiply_const_xx_0, '0']
+- [cuda_multiply_const_xx_0, '0', qtgui_time_sink_x_0, '0']
 
 metadata:
   file_format: 1

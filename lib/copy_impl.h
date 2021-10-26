@@ -12,7 +12,7 @@
 #ifndef INCLUDED_CUDA_COPY_IMPL_H
 #define INCLUDED_CUDA_COPY_IMPL_H
 
-#include <cuda/copy.h>
+#include <gnuradio/cuda/copy.h>
 
 namespace gr {
 namespace cuda {
