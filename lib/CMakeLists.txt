@@ -10,6 +10,7 @@
 # Setup library
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
+find_package(CUDA)
 
 ###############################################################################
 # CUDA Dependency is required
