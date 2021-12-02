@@ -4,6 +4,11 @@ CUDA Support for GNU Radio using the custom buffer changes introduced in GR 3.10
 
 <img title="Simple flowgraph with CUDA block" alt="Simple CUDA flowgraph" src="docs/img/flowgraph_copy.png">
 
+## Acknowledgement
+
+This OOT is adapted/copied from the gr-cuda_buffer OOT work by Black Lynx, Inc. (https://github.com/BlackLynx-Inc/gr-cuda_buffer) and relies on the custom buffer feature developed by David Sorber and documented here:
+https://wiki.gnuradio.org/index.php/CustomBuffers
+
 ## Prerequisites
 
 1. NVIDIA CUDA supported GPU
@@ -59,5 +64,20 @@ target_link_libraries(gnuradio-myoot PUBLIC gnuradio::gnuradio-runtime gnuradio-
 
 4. Link to the custom CUDA code
 ```cmake
-target_link_libraries(gnuradio-testcuda PRIVATE gnuradio-myoot-cu)
+target_link_libraries(gnuradio-myoot PRIVATE gnuradio-myoot-cu)
 ```
+
+## Creating a Block in an OOT with CUDA acceleration
+
+1. Create a `.cu` file that will hold the CUDA kernel and wrapper and be compiled with `nvcc` and linked to the block
+
+See `multiply_const.cu` for an example
+
+2. Use `gr_modtool` to create a block in your OOT
+
+See `multiply_const.h`, `multiply_const_impl.{cc,h}`
+
+3. Set the io_signature to specify the custom buffer
+
+3. Call the kernel wrapper inside the `work()` function
+
