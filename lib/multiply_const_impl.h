@@ -9,6 +9,7 @@
 #define INCLUDED_CUDA_MULTIPLY_CONST_IMPL_H
 
 #include <gnuradio/cuda/multiply_const.h>
+#include <gnuradio/cuda/cuda_block.h>
 #include <cuda.h>
 #include <cuda_runtime_api.h>
 
@@ -16,14 +17,14 @@ namespace gr {
 namespace cuda {
 
 template <class T>
-class multiply_const_impl : public multiply_const<T>
+class multiply_const_impl : public multiply_const<T>, public cuda_block
 {
+
+private:
+
     T d_k;
     const size_t d_vlen;
 
-    cudaStream_t d_stream;
-    int d_min_grid_size;
-    int d_block_size;
 public:
     multiply_const_impl(T k, size_t vlen);
 
