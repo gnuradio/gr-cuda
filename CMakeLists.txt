@@ -163,6 +163,6 @@ install(FILES cmake/Modules/gnuradio-cudaConfig.cmake
 include(CMakePackageConfigHelpers)
 configure_package_config_file(
     ${PROJECT_SOURCE_DIR}/cmake/Modules/targetConfig.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/cmake/Modules/${target}Targets.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/cmake/Modules/${target}Config.cmake
     INSTALL_DESTINATION ${GR_CMAKE_DIR}
 )
