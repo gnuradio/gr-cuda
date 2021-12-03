@@ -151,18 +151,3 @@ if(ENABLE_PYTHON)
 else(ENABLE_PYTHON)
   message(STATUS "PYTHON and GRC components are disabled")
 endif(ENABLE_PYTHON)
-
-########################################################################
-# Install cmake search helper for this library
-########################################################################
-
-install(FILES cmake/Modules/gnuradio-cudaConfig.cmake
-    DESTINATION ${GR_CMAKE_DIR}
-)
-
-include(CMakePackageConfigHelpers)
-configure_package_config_file(
-    ${PROJECT_SOURCE_DIR}/cmake/Modules/targetConfig.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/cmake/Modules/${target}Config.cmake
-    INSTALL_DESTINATION ${GR_CMAKE_DIR}
-)
