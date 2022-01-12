@@ -18,6 +18,7 @@ find_package(CUDA)
 add_library(gnuradio-cuda-cu STATIC 
     cuda_error.cc
     multiply_const.cu
+    load.cu
 )
 set_target_properties(gnuradio-cuda-cu PROPERTIES 
     POSITION_INDEPENDENT_CODE ON
@@ -44,6 +45,7 @@ list(APPEND cuda_sources
     cuda_buffer.cc
     copy_impl.cc
     multiply_const_impl.cc
+    load_impl.cc
 )
 
 set(cuda_sources "${cuda_sources}" PARENT_SCOPE)
