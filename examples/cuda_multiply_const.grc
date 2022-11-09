@@ -11,7 +11,7 @@ options:
     gen_linking: dynamic
     generate_options: qt_gui
     hier_block_src_path: '.:'
-    id: cuda_copy
+    id: cuda_multiply_const
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -22,7 +22,8 @@ options:
     run_options: prompt
     sizing_mode: fixed
     thread_safe_setters: ''
-    title: CUDA Copy Example
+    title: CUDA Multiply Const Example
+    window_size: (1000,1000)
   states:
     bus_sink: false
     bus_source: false
@@ -40,7 +41,9 @@ blocks:
     label: ''
     min_len: '200'
     orient: QtCore.Qt.Horizontal
+    outputmsgname: value
     rangeType: float
+    showports: 'False'
     start: '0'
     step: '.01'
     stop: '1'
@@ -85,6 +88,25 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [264, 236.0]
+    rotation: 0
+    state: true
+- name: blocks_copy_0
+  id: blocks_copy
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    enabled: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    showports: 'False'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [816, 276.0]
     rotation: 0
     state: true
 - name: cuda_multiply_const_xx_0
@@ -199,13 +221,15 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [784, 260.0]
+    coordinate: [1032, 260.0]
     rotation: 0
     state: true
 
 connections:
 - [analog_sig_source_x_0, '0', cuda_multiply_const_xx_0, '0']
-- [cuda_multiply_const_xx_0, '0', qtgui_time_sink_x_0, '0']
+- [blocks_copy_0, '0', qtgui_time_sink_x_0, '0']
+- [cuda_multiply_const_xx_0, '0', blocks_copy_0, '0']
 
 metadata:
   file_format: 1
+  grc_version: v3.11.0.0git-310-g66696bf2

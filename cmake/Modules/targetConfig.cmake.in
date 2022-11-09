@@ -5,6 +5,39 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
+if(NOT PKG_CONFIG_FOUND)
+    INCLUDE(FindPkgConfig)
+endif()
+PKG_CHECK_MODULES(PC_@TARGET@ gnuradio-cuda)
+
+FIND_PATH(
+    @TARGET@_INCLUDE_DIRS
+    NAMES gnuradio/cuda/api.h
+    HINTS $ENV{@TARGET@_DIR}/include
+        ${PC_@TARGET@_INCLUDEDIR}
+    PATHS ${CMAKE_INSTALL_PREFIX}/include
+          /usr/local/include
+          /usr/include
+)
+
+FIND_LIBRARY(
+    @TARGET@_LIBRARIES
+    NAMES gnuradio-cuda
+    HINTS $ENV{@TARGET@_DIR}/lib
+        ${PC_@TARGET@_LIBDIR}
+    PATHS ${CMAKE_INSTALL_PREFIX}/lib
+          ${CMAKE_INSTALL_PREFIX}/lib64
+          /usr/local/lib
+          /usr/local/lib64
+          /usr/lib
+          /usr/lib64
+          )
+
+INCLUDE(FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(@TARGET@ DEFAULT_MSG @TARGET@_LIBRARIES @TARGET@_INCLUDE_DIRS)
+MARK_AS_ADVANCED(@TARGET@_LIBRARIES @TARGET@_INCLUDE_DIRS)
+
+
 include(CMakeFindDependencyMacro)
 
 set(target_deps "@TARGET_DEPENDENCIES@")

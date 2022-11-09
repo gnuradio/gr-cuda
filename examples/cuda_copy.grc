@@ -1,7 +1,7 @@
 options:
   parameters:
     author: Josh Morman
-    catch_exceptions: 'True'
+    catch_exceptions: 'False'
     category: '[GRC Hier Blocks]'
     cmake_opt: ''
     comment: ''
@@ -23,6 +23,7 @@ options:
     sizing_mode: fixed
     thread_safe_setters: ''
     title: CUDA Copy Example
+    window_size: (1000,1000)
   states:
     bus_sink: false
     bus_source: false
@@ -63,7 +64,26 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [264, 236.0]
+    coordinate: [240, 172.0]
+    rotation: 0
+    state: true
+- name: blocks_copy_0
+  id: blocks_copy
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    enabled: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    showports: 'False'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [920, 276.0]
     rotation: 0
     state: true
 - name: cuda_copy_0
@@ -80,9 +100,94 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [520, 284.0]
+    coordinate: [512, 168.0]
     rotation: 0
-    state: true
+    state: enabled
+- name: cuda_copy_0_0
+  id: cuda_copy
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [688, 168.0]
+    rotation: 0
+    state: enabled
+- name: cuda_copy_0_0_0
+  id: cuda_copy
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [520, 224.0]
+    rotation: 180
+    state: enabled
+- name: cuda_copy_0_0_0_0
+  id: cuda_copy
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [520, 296.0]
+    rotation: 0
+    state: enabled
+- name: cuda_copy_0_0_0_0_0
+  id: cuda_copy
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [696, 296.0]
+    rotation: 0
+    state: enabled
+- name: cuda_copy_0_1
+  id: cuda_copy
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [704, 224.0]
+    rotation: 180
+    state: enabled
 - name: qtgui_time_sink_x_0
   id: qtgui_time_sink_x
   parameters:
@@ -177,13 +282,20 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [712, 260.0]
+    coordinate: [1112, 260.0]
     rotation: 0
-    state: true
+    state: enabled
 
 connections:
 - [analog_sig_source_x_0, '0', cuda_copy_0, '0']
-- [cuda_copy_0, '0', qtgui_time_sink_x_0, '0']
+- [blocks_copy_0, '0', qtgui_time_sink_x_0, '0']
+- [cuda_copy_0, '0', cuda_copy_0_0, '0']
+- [cuda_copy_0_0, '0', cuda_copy_0_1, '0']
+- [cuda_copy_0_0_0, '0', cuda_copy_0_0_0_0, '0']
+- [cuda_copy_0_0_0_0, '0', cuda_copy_0_0_0_0_0, '0']
+- [cuda_copy_0_0_0_0_0, '0', blocks_copy_0, '0']
+- [cuda_copy_0_1, '0', cuda_copy_0_0_0, '0']
 
 metadata:
   file_format: 1
+  grc_version: 3.10.3.0

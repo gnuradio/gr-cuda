@@ -18,6 +18,7 @@ find_package(CUDA)
 add_library(gnuradio-cuda-cu STATIC 
     cuda_error.cc
     multiply_const.cu
+    load.cu
 )
 set_target_properties(gnuradio-cuda-cu PROPERTIES 
     POSITION_INDEPENDENT_CODE ON
@@ -29,21 +30,12 @@ target_include_directories(gnuradio-cuda-cu
     PUBLIC $<INSTALL_INTERFACE:include>
     ${CUDA_INCLUDE_DIRS} 
   )
-# Make a fat binary for supported architectures
-# Compile for supported archs; CMake workaround, see: https://stackoverflow.com/a/54505975/73878
-target_compile_options(gnuradio-cuda-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_60,code=sm_60>")
-target_compile_options(gnuradio-cuda-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_61,code=sm_61>")
-target_compile_options(gnuradio-cuda-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_62,code=sm_62>")
-target_compile_options(gnuradio-cuda-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_70,code=sm_70>")
-target_compile_options(gnuradio-cuda-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_72,code=sm_72>")
-target_compile_options(gnuradio-cuda-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_75,code=sm_75>")
-# target_compile_options(gnuradio-myoot-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_80,code=sm_80>")
-# target_compile_options(gnuradio-myoot-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_86,code=sm_86>")
 
 list(APPEND cuda_sources
     cuda_buffer.cc
     copy_impl.cc
     multiply_const_impl.cc
+    load_impl.cc
 )
 
 set(cuda_sources "${cuda_sources}" PARENT_SCOPE)
@@ -71,6 +63,22 @@ if(APPLE)
         INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib"
     )
 endif(APPLE)
+
+# Make a fat binary for supported architectures
+if(${CMAKE_VERSION} VERSION_LESS "3.18") 
+    # Compile for supported archs; CMake workaround, see: https://stackoverflow.com/a/54505975/73878
+    target_compile_options(gnuradio-cuda-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_60,code=sm_60>")
+    target_compile_options(gnuradio-cuda-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_61,code=sm_61>")
+    target_compile_options(gnuradio-cuda-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_62,code=sm_62>")
+    target_compile_options(gnuradio-cuda-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_70,code=sm_70>")
+    target_compile_options(gnuradio-cuda-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_72,code=sm_72>")
+    target_compile_options(gnuradio-cuda-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_75,code=sm_75>")
+    # target_compile_options(gnuradio-myoot-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_80,code=sm_80>")
+    # target_compile_options(gnuradio-myoot-cu PRIVATE "$<$<COMPILE_LANGUAGE:CUDA>:SHELL:-gencode arch=compute_86,code=sm_86>")
+else()
+    set_target_properties(gnuradio-cuda-cu PROPERTIES CUDA_ARCHITECTURES "60;61;62;70;72;75")
+    set_target_properties(gnuradio-cuda PROPERTIES CUDA_ARCHITECTURES "60;61;62;70;72;75")
+endif()
 
 ########################################################################
 # Install built library files
